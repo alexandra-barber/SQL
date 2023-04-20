@@ -1,0 +1,26 @@
+-- Create a store database
+
+CREATE TABLE clothing_store (id INTEGER PRIMARY KEY, name TEXT, department TEXT, price INTEGER, stock INTEGER);
+
+INSERT INTO clothing_store VALUES (1, "blouse", "women's", 20, 10);
+INSERT INTO clothing_store VALUES (2, "slacks", "women's", 40, 8);
+INSERT INTO clothing_store VALUES (3, "tank top", "women's", 10, 50);
+INSERT INTO clothing_store VALUES (4, "heels", "women's", 50, 10);
+INSERT INTO clothing_store VALUES (5, "flats", "women's", 45, 10);
+INSERT INTO clothing_store VALUES (6, "purse", "bags", 35, 8);
+INSERT INTO clothing_store VALUES (7, "necklace", "jewelry", 20, 10);
+INSERT INTO clothing_store VALUES (8, "button down", "men's", 20, 15);
+INSERT INTO clothing_store VALUES (9, "dress pants", "men's", 45, 20);
+INSERT INTO clothing_store VALUES (10, "belt", "men's", 15, 10);
+INSERT INTO clothing_store VALUES (11, "under shirt", "men's", 10, 30);
+INSERT INTO clothing_store VALUES (12, "loafers", "men's", 50, 10);
+INSERT INTO clothing_store VALUES (13, "computer bag", "bags", 40, 10);
+INSERT INTO clothing_store VALUES (14, "watch", "jewelry", 40, 10);
+INSERT INTO clothing_store VALUES (15, "blazer", "men's", 55, 20);
+
+-- display database ordered by price
+SELECT * FROM clothing_store ORDER BY price;
+
+--what items are in the "women's" department?
+SELECT * FROM clothing_store WHERE department = "women's"
+
