@@ -1,0 +1,46 @@
+/* Create tables about the people and what they do here */
+
+CREATE TABLE actors (id INTEGER PRIMARY KEY, name TEXT, age INTEGER);
+
+INSERT INTO actors (name, age) VALUES ("Will Arnett", "53");
+INSERT INTO actors (name, age) VALUES ("Jason Bateman", "54");
+INSERT INTO actors (name, age) VALUES ("Amy Poehler", "51");
+INSERT INTO actors (name, age) VALUES ("Maya Rudolph", "50");
+INSERT INTO actors (name, age) VALUES ("Nick Offerman", "53");
+
+CREATE TABLE tv_show (id INTEGER PRIMARY KEY, person_id INTEGER, show TEXT);
+
+INSERT INTO tv_show (person_id, show) VALUES (1, "Arrested Development");
+INSERT INTO tv_show (person_id, show) VALUES (2, "Arrested Development");
+INSERT INTO tv_show (person_id, show) VALUES (3, "Parks and Recreation");
+INSERT INTO tv_show (person_id, show) VALUES (5, "Parks and Recreation");
+INSERT INTO tv_show (person_id, show) VALUES (4, "SNL");
+INSERT INTO tv_show (person_id, show) VALUES (3, "SNL");
+
+CREATE TABLE costar (id INTEGER PRIMARY KEY, person1_id INTEGER, person2_id INTEGER);
+
+INSERT INTO costar (person1_id, person2_id) VALUES (1, 2);
+INSERT INTO costar (person1_id, person2_id) VALUES (3, 5);
+INSERT INTO costar (person1_id, person2_id) VALUES (4, 3);
+
+--What show is each actor on?
+SELECT actors.name, tv_show.show FROM actors JOIN tv_show ON actors.id=tv_show.person_id;
+
+--Which actors were on SNL?
+SELECT actors.name, tv_show.show FROM actors JOIN tv_show ON actors.id=tv_show.person_id WHERE tv_show.show = "SNL";
+
+--Which actors were on Arrested Development?
+SELECT actors.name, tv_show.show FROM actors JOIN tv_show ON actors.id=tv_show.person_id WHERE tv_show.show = "Arrested Development";
+
+--Which actors were on Parks and Reacreation?
+SELECT actors.name, tv_show.show FROM actors JOIN tv_show ON actors.id=tv_show.person_id WHERE tv_show.show = "Parks and Recreation";
+
+--Join actors name and age from table "actors", and show from table "tv_show"
+SELECT actors.name, actors.age, tv_show.show FROM actors LEFT OUTER JOIN tv_show ON actors.id=tv_show.person_id;
+
+--Order actors by age descending
+SELECT actors.name, actors.age, tv_show.show FROM actors LEFT OUTER JOIN tv_show ON actors.id=tv_show.person_id ORDER BY age desc;
+
+--Join table "actors" and table "costar" to show costars on shows
+SELECT a.name, b.name FROM costar JOIN actors a ON a.id=costar.person1_id JOIN actors b ON b.id=costar.person2_id;
+
