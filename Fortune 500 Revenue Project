@@ -1,0 +1,33 @@
+FORTUNE 500 QUERIES
+--For this project, I used a database that has fake Fortune 500 data in it. 
+I started by quering for general info, then I began to try to connect certain data like maternity leave, tenure, paid time off, to observe any patterns.
+
+--Looking for the companies with the highest revenues
+SELECT industry, ROUND(AVG(revenue), 1) as avg_revenue
+FROM fortune_companies
+GROUP BY industry
+HAVING avg_revenue>=300;
+
+--Looking for companies with generous PTO and good tenure
+SELECT company_name FROM fortune_companies
+WHERE paid_time_off_days >=20
+AND avg_employee_tenure >=5.8;
+
+--Organizing average employee tenure by industry
+SELECT industry, ROUND(AVG(avg_employee_tenure),1) FROM fortune_companies 
+GROUP BY industry;
+
+SELECT industry, avg_employee_tenure FROM fortune_companies 
+GROUP BY industry;
+
+SELECT avg_employee_tenure FROM fortune_companies;
+
+--Looking for the best maternity leave offered by sorting from "Best" to "Poor"
+SELECT maternity_leave_weeks, company_name,
+CASE WHEN maternity_leave_weeks>=12 THEN 'Best'
+WHEN maternity_leave_weeks>=8 THEN 'Ok'
+ELSE 'Poor'
+END AS maternity_leave_rank
+FROM fortune_companies
+ORDER BY maternity_leave_rank;
+
