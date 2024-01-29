@@ -1,0 +1,166 @@
+--MARATHON PROJECT
+
+CREATE TABLE marathon (
+    ID INTEGER PRIMARY KEY,
+    participant_name TEXT,
+    completion_fraction REAL,
+    has_run_marathon INTEGER);
+
+INSERT INTO marathon (participant_name, completion_fraction, has_run_marathon)
+VALUES
+    ('Charlotte Chaze', 0.8534, 1),
+    ('Maria Rodriguez', 1.0000, 0),
+    ('Hassan Ali', 0.7065, 0),
+    ('Leila Kim', 0.9545, 1),
+    ('Javier Martinez', 0.8055, 0),
+    ('Fatima Ahmed', 0.6044, 1),
+    ('Priya Patel', 0.7564, 0),
+    ('Mohammed Rahman', 0.4032, 0),
+    ('Sara Nguyen', 0.9032, 1),
+    ('Rahul Sharma', 0.5513, 0);
+
+--Select every participant name and the percent of the marathon they completed
+SELECT participant_name, completion_fraction*100 AS completion_percent 
+FROM marathon;
+
+--Select every participant name and the percent of the marathon that they completed. 
+--Show the percent of the marathon completed rounded to one decimal place.
+SELECT participant_name, 
+ROUND(completion_fraction*100, 1) AS completion_percent
+FROM marathon;
+
+--Show how many employees completed each quarter of the marathon (75% or more, 50%, 25%, or under 25%).
+SELECT COUNT(*),
+CASE WHEN completion_fraction>=.75 THEN "75%+"
+WHEN completion_fraction>=.5 THEN "50%+"
+WHEN completion_fraction>=.25 THEN "25%+"
+ELSE "Under 25%"
+END AS "quarter_completed"
+FROM marathon
+GROUP BY quarter_completed;
+
+--EMPLOYEE SALARIES PROJECT
+
+CREATE TABLE employees (
+    employee_id INTEGER PRIMARY KEY,
+    department TEXT,
+    salary DECIMAL(10, 2),
+    years_of_experience INTEGER);
+
+INSERT INTO employees (employee_id, department, salary, years_of_experience)
+VALUES
+    (1, 'Finance', 60000.00, 5),
+    (2, 'Marketing', 55000.00, 3),
+    (3, 'Sales', 75000.00, 8),
+    (4, 'Engineering', 80000.00, 7),
+    (5, 'HR', 50000.00, 2),
+    (6, 'Finance', 70000.00, 6),
+    (7, 'Marketing', 60000.00, 4),
+    (8, 'Sales', 85000.00, 10),
+    (9, 'Engineering', 90000.00, 9),
+    (10, 'HR', 55000.00, 3),
+    (11, 'Sales', 72000.00, 6),
+    (12, 'Sales', 80000.00, 7),
+    (13, 'Engineering', 85000.00, 8),
+    (14, 'Engineering', 92000.00, 10);
+
+--Calculate how much is spent per year on the salaries for each department where the total spent on the salaries is at least $300,000. 
+--Your results table should include the department name and the total spent on salaries in that department.
+SELECT SUM(salary) AS total_spent, department FROM employees 
+GROUP BY department
+HAVING total_spent>=300000;
+
+--Select all the departments that pay an average of at least $70,000 per year. 
+--Your results table should include the department and average salary for that department, and you should rename the average salary column using an alias.
+SELECT AVG(salary) AS avg_salary, department 
+FROM employees
+GROUP BY department
+HAVING avg_salary >=70000;
+
+--TELECOM CUSTOMER PROJECT
+
+CREATE TABLE products (
+    product_id INTEGER PRIMARY KEY,
+    product_name TEXT,
+    product_type TEXT,
+    speed_mbps INTEGER,
+    data_limit_gb INTEGER,
+    monthly_price DECIMAL(8, 2));
+
+INSERT INTO products (product_id, product_name, product_type, speed_mbps, data_limit_gb, monthly_price)
+VALUES
+    (1, 'High-Speed Internet', 'Internet', 100, 500, 49.99),
+    (2, 'Unlimited Data Plan', 'Cell Phone Service', NULL, NULL, 35.00),
+    (3, 'Premium TV Package', 'TV Package', NULL, NULL, 79.99),
+    (4, 'Fiber Optic Internet', 'Internet', 500, 1000, 79.99),
+    (5, 'Family Plan', 'Cell Phone Service', NULL, NULL, 25.00);
+    
+CREATE TABLE customer_subscriptions (
+customer_id TEXT PRIMARY KEY,
+product_id INTEGER,
+price DECIMAL(8, 2),
+email TEXT,
+FOREIGN KEY (product_id) REFERENCES products (product_id));
+
+INSERT INTO customer_subscriptions (customer_id, product_id, price, email)
+VALUES
+    ('123456789012', 1, 49.99, 'john.doe@example.com'),
+    ('234567890123', 2, 35.00, 'jane.smith@example.com'),
+    ('345678901234', 3, 79.99, 'alice.davis@example.com'),
+    ('456789012345', 4, 79.99, 'bob.johnson@example.com'),
+    ('567890123456', 1, 49.99, 'susan.wilson@example.com');
+
+--Write SQL that will select the product names of all the Internet products types.
+SELECT product_name FROM products WHERE product_type='Internet'
+
+--Write a query that will select the customer IDs for all the customers who are subscribed to High-Speed Internet.
+SELECT customer_id FROM customer_subscriptions WHERE product_id=1
+
+--Write a query that will select the email addresses of all the customers who are subscribed to products with the "Internet" product type.
+SELECT email FROM customer_subscriptions 
+WHERE product_id 
+IN(SELECT product_id FROM products WHERE product_type='Internet');
+
+--BANK PRODUCTS PROJECT
+
+CREATE TABLE bank_products (
+    product_id INTEGER PRIMARY KEY,
+    product_name TEXT,
+    product_type TEXT,
+    interest_rate DECIMAL(5, 2),
+    monthly_fee DECIMAL(6, 2),
+    minimum_balance DECIMAL(10, 2));
+
+INSERT INTO bank_products (product_id, product_name, product_type, interest_rate, monthly_fee, minimum_balance)
+VALUES
+    (1, 'Savings Account', 'Savings', 0.75, 0.00, 100.00),
+    (2, 'Checking Account', 'Checking', 0.25, 5.00, 50.00),
+    (3, 'Business Account', 'Business', 1.50, 10.00, 500.00),
+    (4, 'Credit Card', 'Credit Card', 18.99, 0.00, 0.00),
+    (5, 'Mortgage Loan', 'Loan', 3.25, 0.00, 100000.00),
+    (6, 'Certificate of Deposit', 'Savings', 1.50, 0.00, 1000.00),
+    (7, 'Student Checking Account', 'Checking', 0.10, 0.00, 10.00),
+    (8, 'Business Credit Card', 'Credit Card', 16.99, 0.00, 0.00),
+    (9, 'Home Equity Loan', 'Loan', 4.50, 0.00, 50000.00),
+    (10, 'IRA Account', 'Savings', 1.25, 0.00, 500.00),
+    (11, 'Personal Loan', 'Loan', 8.75, 0.00, 5000.00),
+    (12, 'Money Market Account', 'Savings', 1.00, 0.00, 500.00),
+    (13, 'Youth Savings Account', 'Savings', 0.50, 0.00, 10.00),
+    (14, 'Rewards Credit Card', 'Credit Card', 21.99, 0.00, 0.00),
+    (15, 'Auto Loan', 'Loan', 4.25, 0.00, 20000.00);
+
+--Select all the bank product names so we know what our options are.
+SELECT product_name FROM bank_products;
+
+--Write another query that uses OR to show the product names that have a Checking OR Savings product type.
+SELECT product_name FROM bank_products;
+SELECT product_name FROM bank_products 
+WHERE product_type='Savings'
+OR product_type='Checking'
+
+--Write another query that uses AND to show the product names that have a "Savings" product type AND have an interest_rate of at least 0.75, AND have no monthly fee. 
+--Include the product name and interest rate in your SELECT statement.
+SELECT product_name, interest_rate FROM bank_products
+WHERE product_type='Savings'
+AND interest_rate>=0.75
+AND monthly_fee=0;
